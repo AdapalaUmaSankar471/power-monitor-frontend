@@ -4,7 +4,7 @@ import axios from "axios";
 // AXIOS INSTANCE
 // ============================
 const API = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL:process.env.REACT_APP_API_URL || "http://localhost:8080",
   timeout: 10000,
 });
 
