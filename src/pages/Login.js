@@ -23,6 +23,9 @@ username,
 password
 });
 
+console.log("Full API Response:", res);
+console.log("Response Data:", res.data);
+console.log("Token:", res.data.token);
 // Save auth data
 localStorage.setItem("token",res.data.token);
 localStorage.setItem("role",res.data.role);
