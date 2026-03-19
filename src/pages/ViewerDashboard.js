@@ -62,7 +62,8 @@ function ViewerDashboard() {
   // WebSocket
   // ============================
   useEffect(() => {
-    const socket = new SockJS("http://localhost:8080/power-monitor");
+    const wsUrl = (process.env.REACT_APP_API_URL || 'http://localhost:8080').replace('http://', 'https://');
+    const socket = new SockJS(wsUrl + '/power-monitor');
 
     const client = new Client({
       webSocketFactory: () => socket,
