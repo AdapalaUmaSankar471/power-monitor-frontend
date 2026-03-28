@@ -70,12 +70,10 @@
 // export const getBudgetStatus = () => API.get("/budget/status");
 
 // export default API;
-
-
 import axios from "axios";
 
 const API = axios.create({
-  // ✅ FIXED BASE URL
+  // ✅ CORRECT BACKEND URL
   baseURL:
     process.env.REACT_APP_API_URL ||
     "https://power-monitor-backend-4lja.onrender.com",
@@ -137,9 +135,12 @@ export const loginUser = (data) => API.post("/auth/login", data);
 export const registerUser = (data) => API.post("/auth/register", data);
 
 // =========================
-// DEVICES
+// DEVICES (🔥 FIXED)
 // =========================
-export const getDevices = () => API.get("/devices");
+
+// ✅ THIS IS THE MAIN FIX
+export const getDevices = () => API.get("/devices/all");
+
 export const toggleDevice = (id) => API.put(`/devices/toggle/${id}`);
 export const addDevice = (device) => API.post("/devices/add", device);
 export const updateDevice = (id, device) =>
@@ -147,6 +148,11 @@ export const updateDevice = (id, device) =>
 export const deleteDevice = (id) => API.delete(`/devices/delete/${id}`);
 export const updateDeviceBudget = (id, budget) =>
   API.put(`/devices/budget/${id}?budget=${budget}`);
+
+// =========================
+// LOGS
+// =========================
+export const getSystemLogs = () => API.get("/devices/logs");
 
 // =========================
 // POWER LOGS
@@ -157,11 +163,6 @@ export const getPowerLogs = () => API.get("/logs");
 // POWER USAGE
 // =========================
 export const getPowerUsage = () => API.get("/usage/all");
-
-// =========================
-// SYSTEM LOGS
-// =========================
-export const getSystemLogs = () => API.get("/devices/logs");
 
 // =========================
 // USER PROFILE
