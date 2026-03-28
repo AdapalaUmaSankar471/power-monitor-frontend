@@ -271,6 +271,7 @@
 //   borderBottom: "1px solid #eee",
 //   padding: "8px 0"
 // };
+
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import {
   Box,
@@ -401,7 +402,8 @@ function AdminDashboard() {
             {darkMode ? "Light Mode" : "Dark Mode"}
           </Button>
 
-          <Box sx={{ position: "relative" }}>
+          {/* 🔔 Notification */}
+          <Box sx={{ position: "relative", ml: 2 }}>
             <IconButton
               sx={{ color: darkMode ? "white" : "#111827" }}
               onClick={() => setShowNotifications(!showNotifications)}
@@ -410,13 +412,7 @@ function AdminDashboard() {
             </IconButton>
 
             {showNotifications && (
-              <Box
-                sx={{
-                  ...notificationPanel,
-                  background: darkMode ? "#0f172a" : "#ffffff",
-                  color: darkMode ? "white" : "#111827"
-                }}
-              >
+              <Box sx={notificationPanel(darkMode)}>
                 <Typography variant="subtitle1">Notifications</Typography>
 
                 {notifications.length === 0 ? (
@@ -444,6 +440,7 @@ function AdminDashboard() {
 
       {/* CARDS */}
       <DashboardCards
+        darkMode={darkMode}
         devices={devices.length}
         activeDevices={devices.filter((d) => isDeviceOn(d.status)).length}
         load={load}
@@ -460,7 +457,7 @@ function AdminDashboard() {
           }}
         >
           <Typography sx={{ mb: 1 }}>Live Power Load</Typography>
-          <PowerChart load={load} />
+          <PowerChart load={load} darkMode={darkMode} />
         </Box>
       </Box>
 
@@ -473,8 +470,9 @@ function AdminDashboard() {
         }}
       >
         <Typography variant="h6">📊 Device Distribution</Typography>
+
         <Box sx={{ width: "400px", margin: "auto" }}>
-          <ChartPanel devices={devices} />
+          <ChartPanel devices={devices} darkMode={darkMode} />
         </Box>
       </Paper>
 
@@ -596,16 +594,19 @@ const deviceCard = {
   textAlign: "center"
 };
 
-const notificationPanel = {
+// 🔥 FINAL FIX
+const notificationPanel = (darkMode) => ({
   position: "absolute",
-  top: "50px",
+  top: "60px",
   right: "0",
   width: "260px",
+  background: darkMode ? "#0f172a" : "#ffffff",
+  color: darkMode ? "white" : "#111827",
   borderRadius: "12px",
   padding: "12px",
   zIndex: 9999,
-  boxShadow: "0 8px 30px rgba(0,0,0,0.4)"
-};
+  boxShadow: "0 10px 30px rgba(0,0,0,0.3)"
+});
 
 const notificationItem = {
   borderBottom: "1px solid rgba(255,255,255,0.1)",
