@@ -24,6 +24,7 @@ function UserDashboard() {
       console.log("Error loading user dashboard:", err);
     }
   };
+  
 
   return (
     <Box sx={container}>
@@ -50,6 +51,7 @@ function UserDashboard() {
   );
 }
 
+
 export default UserDashboard;
 
 // STYLES
@@ -64,3 +66,5 @@ const card = {
   p: 3,
   borderRadius: "16px"
 };
+
+return <h1>USER DASHBOARD WORKING ✅</h1>;
