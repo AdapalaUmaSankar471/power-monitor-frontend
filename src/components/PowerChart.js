@@ -207,7 +207,8 @@ ChartJS.register(
   Legend
 );
 
-function PowerChart({ load, logs = [] }) {
+function PowerChart({ load, logs = [], darkMode }) {
+
   const clientRef = useRef(null);
 
   const [chartData, setChartData] = useState({
@@ -216,8 +217,8 @@ function PowerChart({ load, logs = [] }) {
       {
         label: "Power Load (W)",
         data: [],
-        borderColor: "#3b82f6", // 🔥 updated color
-        backgroundColor: "rgba(59, 130, 246, 0.3)", // 🔥 glow fill
+        borderColor: "#3b82f6",
+        backgroundColor: "rgba(59, 130, 246, 0.3)",
         tension: 0.5,
         fill: true,
         pointRadius: 3,
@@ -226,7 +227,7 @@ function PowerChart({ load, logs = [] }) {
     ],
   });
 
-  // 1️⃣ Load History Data
+  // 1️⃣ Load History
   useEffect(() => {
     if (!logs || logs.length === 0) return;
 
@@ -266,7 +267,6 @@ function PowerChart({ load, logs = [] }) {
 
   // 3️⃣ WebSocket Real-Time
   useEffect(() => {
-    //const baseUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";
     const baseUrl = process.env.REACT_APP_API_URL || "https://your-backend.onrender.com";
     const socket = new SockJS(baseUrl + "/power-monitor");
 
@@ -314,7 +314,13 @@ function PowerChart({ load, logs = [] }) {
     };
   }, []);
 
-  // 🔥 UPDATED OPTIONS (DARK MODE)
+  // ✅ DARK / LIGHT MODE COLORS
+  const textColor = darkMode ? "white" : "#111827";
+  const gridColor = darkMode
+    ? "rgba(255,255,255,0.1)"
+    : "rgba(0,0,0,0.1)";
+
+  // 🔥 FIXED OPTIONS
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -322,7 +328,7 @@ function PowerChart({ load, logs = [] }) {
     plugins: {
       legend: {
         labels: {
-          color: "white", // legend text
+          color: textColor
         },
       },
     },
@@ -330,19 +336,19 @@ function PowerChart({ load, logs = [] }) {
     scales: {
       x: {
         ticks: {
-          color: "white", // x labels
+          color: textColor
         },
         grid: {
-          color: "rgba(255,255,255,0.1)", // light grid
+          color: gridColor
         },
       },
       y: {
         beginAtZero: true,
         ticks: {
-          color: "white", // y labels
+          color: textColor
         },
         grid: {
-          color: "rgba(255,255,255,0.1)",
+          color: gridColor
         },
       },
     },
@@ -351,7 +357,7 @@ function PowerChart({ load, logs = [] }) {
   if (chartData.labels.length === 0) {
     return (
       <Box sx={{ textAlign: "center", py: 4 }}>
-        <Typography color="gray">
+        <Typography color={textColor}>
           Waiting for power data...
         </Typography>
       </Box>

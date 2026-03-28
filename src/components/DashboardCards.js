@@ -33,6 +33,13 @@ const cardData = [
 ];
 
 function DashboardCards(props) {
+
+  const { darkMode } = props;
+
+  // ✅ TEXT COLORS BASED ON MODE
+  const textColor = darkMode ? "white" : "#111827";
+  const subTextColor = darkMode ? "rgba(255,255,255,0.6)" : "#6b7280";
+
   return (
     <Box sx={gridStyle}>
       {cardData.map((card, index) => {
@@ -44,8 +51,12 @@ function DashboardCards(props) {
             key={index}
             sx={{
               ...cardStyle,
-              background: "rgba(255,255,255,0.05)", // 🔥 glass effect
-              border: "1px solid rgba(255,255,255,0.1)"
+              background: darkMode
+                ? "rgba(255,255,255,0.05)"
+                : "#ffffff",
+              border: darkMode
+                ? "1px solid rgba(255,255,255,0.1)"
+                : "1px solid #e5e7eb"
             }}
           >
             <CardContent>
@@ -68,7 +79,7 @@ function DashboardCards(props) {
               {/* TITLE */}
               <Typography
                 variant="body2"
-                sx={{ color: "rgba(255,255,255,0.6)" }}
+                sx={{ color: subTextColor }}
               >
                 {card.title}
               </Typography>
@@ -82,7 +93,7 @@ function DashboardCards(props) {
                     ? isOverload
                       ? "#ef4444"
                       : "#22c55e"
-                    : "white"
+                    : textColor
                 }}
               >
                 {value}
@@ -100,7 +111,7 @@ function DashboardCards(props) {
 export default DashboardCards;
 
 /////////////////////////////////////////////////////////
-// 🔥 STYLES (DARK + PREMIUM)
+// 🔥 STYLES
 /////////////////////////////////////////////////////////
 
 const gridStyle = {
@@ -115,11 +126,11 @@ const cardStyle = {
   padding: "15px",
   transition: "0.3s",
   cursor: "pointer",
-  backdropFilter: "blur(10px)", // 🔥 glass blur
-  boxShadow: "0 8px 30px rgba(0,0,0,0.5)",
+  backdropFilter: "blur(10px)",
+  boxShadow: "0 8px 30px rgba(0,0,0,0.3)",
   "&:hover": {
     transform: "translateY(-6px)",
-    boxShadow: "0 12px 40px rgba(0,0,0,0.7)"
+    boxShadow: "0 12px 40px rgba(0,0,0,0.5)"
   }
 };
 

@@ -292,9 +292,7 @@ import { Client } from "@stomp/stompjs";
 
 function AdminDashboard() {
 
-  // 🔥 DARK MODE STATE
   const [darkMode, setDarkMode] = useState(true);
-
   const [devices, setDevices] = useState([]);
   const [load, setLoad] = useState(0);
   const [notifications, setNotifications] = useState([]);
@@ -303,16 +301,14 @@ function AdminDashboard() {
   const overloadRef = useRef(false);
 
   const loadDevices = async () => {
-    console.log("🚀 Loading devices...");
     try {
       const res = await getDevices();
-      console.log("📦 Devices API:", res.data); // 👈 ADD THIS
       setDevices(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
-      console.log("❌ Error loading devices:", err);
+      console.log("Error loading devices:", err);
       setDevices([]);
     }
-};
+  };
 
   const isDeviceOn = (status) => {
     return status === true || status === "ON" || status === "on" || status === 1;
@@ -338,13 +334,11 @@ function AdminDashboard() {
   };
 
   useEffect(() => {
-    console.log("🚀 Loading devices...");
     loadDevices();
   }, []);
 
   useEffect(() => {
-    const calculatedLoad = calculateLoadFromDevices(devices);
-    setLoad(calculatedLoad);
+    setLoad(calculateLoadFromDevices(devices));
   }, [devices, calculateLoadFromDevices]);
 
   useEffect(() => {
@@ -393,13 +387,15 @@ function AdminDashboard() {
           ⚡ Admin Power Dashboard
         </Typography>
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
 
-          {/* 🔥 TOGGLE BUTTON */}
           <Button
             variant="outlined"
             size="small"
-            sx={{ color: darkMode ? "white" : "black", borderColor: darkMode ? "white" : "black" }}
+            sx={{
+              color: darkMode ? "white" : "#111827",
+              borderColor: darkMode ? "white" : "#111827"
+            }}
             onClick={() => setDarkMode(!darkMode)}
           >
             {darkMode ? "Light Mode" : "Dark Mode"}
@@ -407,14 +403,20 @@ function AdminDashboard() {
 
           <Box sx={{ position: "relative" }}>
             <IconButton
-              sx={{ color: darkMode ? "white" : "black" }}
+              sx={{ color: darkMode ? "white" : "#111827" }}
               onClick={() => setShowNotifications(!showNotifications)}
             >
               <NotificationsIcon />
             </IconButton>
 
             {showNotifications && (
-              <Box sx={notificationPanel}>
+              <Box
+                sx={{
+                  ...notificationPanel,
+                  background: darkMode ? "#0f172a" : "#ffffff",
+                  color: darkMode ? "white" : "#111827"
+                }}
+              >
                 <Typography variant="subtitle1">Notifications</Typography>
 
                 {notifications.length === 0 ? (
@@ -442,26 +444,34 @@ function AdminDashboard() {
 
       {/* CARDS */}
       <DashboardCards
-        devices={devices?.length || 0}
-        activeDevices={
-          devices?.filter((d) => isDeviceOn(d.status)).length || 0
-        }
+        devices={devices.length}
+        activeDevices={devices.filter((d) => isDeviceOn(d.status)).length}
         load={load}
         status={load > 3000 ? "OVERLOAD" : "NORMAL"}
       />
 
       {/* LIVE CHART */}
       <Box sx={{ mt: 2 }}>
-        <Box sx={chartBox}>
-          <Typography sx={{ mb: 1 }}>
-            Live Power Load
-          </Typography>
+        <Box
+          sx={{
+            ...chartBox,
+            background: darkMode ? "rgba(255,255,255,0.05)" : "#ffffff",
+            color: darkMode ? "white" : "#111827"
+          }}
+        >
+          <Typography sx={{ mb: 1 }}>Live Power Load</Typography>
           <PowerChart load={load} />
         </Box>
       </Box>
 
       {/* PIE CHART */}
-      <Paper sx={paperStyle}>
+      <Paper
+        sx={{
+          ...paperStyle,
+          background: darkMode ? "rgba(255,255,255,0.05)" : "#ffffff",
+          color: darkMode ? "white" : "#111827"
+        }}
+      >
         <Typography variant="h6">📊 Device Distribution</Typography>
         <Box sx={{ width: "400px", margin: "auto" }}>
           <ChartPanel devices={devices} />
@@ -469,12 +479,25 @@ function AdminDashboard() {
       </Paper>
 
       {/* DEVICES */}
-      <Paper sx={paperStyle}>
+      <Paper
+        sx={{
+          ...paperStyle,
+          background: darkMode ? "rgba(255,255,255,0.05)" : "#ffffff",
+          color: darkMode ? "white" : "#111827"
+        }}
+      >
         <Typography variant="h6">🔌 Devices</Typography>
 
         <Box sx={deviceGrid}>
           {devices.map((device) => (
-            <Box key={device.id} sx={deviceCard}>
+            <Box
+              key={device.id}
+              sx={{
+                ...deviceCard,
+                background: darkMode ? "rgba(255,255,255,0.05)" : "#ffffff",
+                color: darkMode ? "white" : "#111827"
+              }}
+            >
               <Typography fontWeight="bold">{device.name}</Typography>
               <Typography>{getDevicePower(device)} W</Typography>
 
@@ -504,9 +527,9 @@ function AdminDashboard() {
 
 export default AdminDashboard;
 
-/////////////////////////////////////////////////////////
-// 🌗 DARK & LIGHT STYLES
-/////////////////////////////////////////////////////////
+// =======================
+// STYLES
+// =======================
 
 const darkStyles = {
   mainContainer: {
@@ -524,13 +547,9 @@ const lightStyles = {
     p: 3,
     background: "#f3f4f6",
     minHeight: "100vh",
-    color: "black"
+    color: "#111827"
   }
 };
-
-/////////////////////////////////////////////////////////
-// OTHER STYLES (SAME)
-/////////////////////////////////////////////////////////
 
 const headerStyle = {
   display: "flex",
@@ -555,13 +574,10 @@ const paperStyle = {
   mt: 3,
   p: 3,
   borderRadius: "16px",
-  background: "rgba(255,255,255,0.05)",
-  backdropFilter: "blur(10px)",
-  color: "white"
+  backdropFilter: "blur(10px)"
 };
 
 const chartBox = {
-  background: "rgba(255,255,255,0.05)",
   padding: "20px",
   borderRadius: "16px",
   height: "300px"
@@ -575,7 +591,6 @@ const deviceGrid = {
 };
 
 const deviceCard = {
-  background: "rgba(255,255,255,0.05)",
   padding: "15px",
   borderRadius: "12px",
   textAlign: "center"
@@ -583,12 +598,13 @@ const deviceCard = {
 
 const notificationPanel = {
   position: "absolute",
-  top: "45px",
-  right: 0,
+  top: "50px",
+  right: "0",
   width: "260px",
-  background: "#0f172a",
   borderRadius: "12px",
-  padding: "12px"
+  padding: "12px",
+  zIndex: 9999,
+  boxShadow: "0 8px 30px rgba(0,0,0,0.4)"
 };
 
 const notificationItem = {
