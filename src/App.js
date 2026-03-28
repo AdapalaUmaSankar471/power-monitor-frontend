@@ -19,6 +19,7 @@ import Settings from "./pages/Settings";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardLayout from "./layouts/DashboardLayout";
+import UserDashboard from "./pages/UserDashboard";
 
 function App() {
   return (
@@ -104,6 +105,11 @@ function App() {
         <Route path="/user" element={
           <ProtectedRoute role="USER">
             <DashboardLayout><ViewerDashboard /></DashboardLayout>
+          </ProtectedRoute>
+        } />
+        <Route path="/user" element={
+          <ProtectedRoute role="USER">
+           <DashboardLayout><UserDashboard /></DashboardLayout>
           </ProtectedRoute>
         } />
 

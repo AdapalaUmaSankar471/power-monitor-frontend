@@ -283,17 +283,31 @@ function Login() {
       });
 
       const token = res.data.token;
-      const role = res.data.role;
+      const role = res.data.role?.toUpperCase(); // ✅ important fix
 
+      // ✅ Store data
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
       localStorage.setItem("username", res.data.username);
 
-      // Role navigation
-      if (role === "ADMIN") navigate("/admin");
-      else if (role === "OPERATOR") navigate("/operator");
-      else if (role === "VIEWER") navigate("/viewer");
-      else if (role === "USER") navigate("/user");
+      // ✅ Role-based navigation (safe + clean)
+      switch (role) {
+        case "ADMIN":
+          navigate("/admin");
+          break;
+        case "OPERATOR":
+          navigate("/operator");
+          break;
+        case "VIEWER":
+          navigate("/viewer");
+          break;
+        case "USER":
+          navigate("/user");   // ✅ your required update
+          break;
+        default:
+          console.warn("Unknown role:", role);
+          navigate("/login");
+      }
 
     } catch (err) {
       setError("❌ Invalid username or password");
@@ -348,7 +362,7 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    background: "#020617"   // 🔥 dark background
+    background: "#020617"
   },
 
   card: {
@@ -357,7 +371,7 @@ const styles = {
     padding: "35px",
     borderRadius: "16px",
     textAlign: "center",
-    boxShadow: "0 20px 50px rgba(0,0,0,0.4)" // 🔥 strong shadow
+    boxShadow: "0 20px 50px rgba(0,0,0,0.4)"
   },
 
   title: {
