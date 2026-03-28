@@ -36,7 +36,7 @@ function Devices() {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("ఈ device delete చేయాలా?")) {
+    if (window.confirm("Are you sure you want to delete this device?")) {
       await deleteDevice(id);
       loadDevices();
     }
