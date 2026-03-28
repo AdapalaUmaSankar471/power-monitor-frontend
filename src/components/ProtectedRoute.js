@@ -7,7 +7,7 @@ function ProtectedRoute({ children, role }) {
   console.log("ProtectedRoute Check:");
   console.log("Token:", token);
   console.log("User Role:", userRole);
-  console.log("Required Role:", role);
+  console.log("RequiredRole:", role);
 
   // ❌ Not logged in
   if (!token) {
