@@ -1,16 +1,10 @@
 import axios from "axios";
 
-// ============================
-// AXIOS INSTANCE
-// ============================
 const API = axios.create({
-  baseURL:process.env.REACT_APP_API_URL || "http://localhost:8080",
+  baseURL: process.env.REACT_APP_API_URL || "http://localhost:8080",
   timeout: 10000,
 });
 
-// ============================
-// REQUEST INTERCEPTOR (TOKEN)
-// ============================
 API.interceptors.request.use(
   (req) => {
     const token = localStorage.getItem("token");
@@ -22,26 +16,37 @@ API.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// ============================
-// RESPONSE INTERCEPTOR
-// ============================
 API.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
       const status = error.response.status;
       if (status === 401) {
-        console.warn("🔒 Unauthorized - Redirecting...");
+        console.warn("🔒 Unauthorized - Clearing session...");
         localStorage.removeItem("token");
+        localStorage.removeItem("role");
+        localStorage.removeItem("username");
+        window.location.href = "/login";
+      }
+      if (status === 403) {
+        console.warn("⛔ Forbidden - Access Denied");
         window.location.href = "/login";
       }
       if (status === 500) {
         console.error("💥 Server Error");
       }
+    } else {
+      console.error("🌐 Network Error - Backend unreachable");
     }
     return Promise.reject(error);
   }
 );
+
+/////////////////////////////////////////////////////////
+// AUTH APIs
+/////////////////////////////////////////////////////////
+export const loginUser = (data) => API.post("/auth/login", data);
+export const registerUser = (data) => API.post("/auth/register", data);
 
 /////////////////////////////////////////////////////////
 // DEVICE APIs
@@ -68,7 +73,7 @@ export const getPowerUsage = () => API.get("/usage/all");
 export const getSystemLogs = () => API.get("/devices/logs");
 
 /////////////////////////////////////////////////////////
-// ✅ USER PROFILE API
+// USER PROFILE API
 /////////////////////////////////////////////////////////
 export const getMyProfile = () => API.get("/users/me");
 
