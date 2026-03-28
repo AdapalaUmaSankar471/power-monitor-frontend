@@ -11,9 +11,7 @@ import { Box, Typography } from "@mui/material";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 function ChartPanel({ devices = [] }) {
-  // ============================
-  // Normalize Device Status
-  // ============================
+
   const isDeviceOn = (status) => {
     return (
       status === true ||
@@ -23,21 +21,13 @@ function ChartPanel({ devices = [] }) {
     );
   };
 
-  // ============================
-  // Extract Labels & Values
-  // ============================
   const labels = [];
   const values = [];
 
   devices.forEach((d) => {
     if (isDeviceOn(d.status)) {
       const name = d.name || `Device ${d.id}`;
-
-      const power =
-        d.powerRating ??
-        d.power ??
-        d.watts ??
-        0;
+      const power = d.powerRating ?? d.power ?? d.watts ?? 0;
 
       labels.push(name);
       values.push(Number(power));
@@ -47,27 +37,22 @@ function ChartPanel({ devices = [] }) {
   const hasData =
     values.length > 0 && values.some((v) => v > 0);
 
-  // ============================
-  // Empty State
-  // ============================
+  // ✅ EMPTY STATE (DARK)
   if (!hasData) {
     return (
       <Box sx={{ textAlign: "center", py: 4 }}>
-        <Typography color="text.secondary">
+        <Typography sx={{ color: "gray" }}>
           No active device power data available
         </Typography>
       </Box>
     );
   }
 
-  // ============================
-  // Chart Data
-  // ============================
+  // 🎨 MODERN COLORS
   const data = {
     labels,
     datasets: [
       {
-        label: "Device Power Usage (W)",
         data: values,
         backgroundColor: [
           "#22c55e",
@@ -79,36 +64,36 @@ function ChartPanel({ devices = [] }) {
           "#e11d48",
           "#6366f1",
         ],
-        borderWidth: 1,
+        borderWidth: 2,
+        borderColor: "#020617", // 🔥 clean separation
+        hoverOffset: 10 // 🔥 hover animation
       },
     ],
   };
 
-  // ============================
-  // Chart Options (Improved UI)
-  // ============================
+  // 🔥 DARK + PREMIUM OPTIONS
   const options = {
     responsive: true,
     plugins: {
       legend: {
         position: "bottom",
+        labels: {
+          color: "white", // 🔥 dark mode text
+          padding: 15
+        }
       },
       tooltip: {
         callbacks: {
           label: (context) => {
-            const value = context.raw;
-            return `${context.label}: ${value} W`;
+            return `${context.label}: ${context.raw} W`;
           },
         },
       },
     },
   };
 
-  // ============================
-  // Render
-  // ============================
   return (
-    <Box sx={{ height: 300 }}>
+    <Box sx={{ height: 320 }}>
       <Pie data={data} options={options} />
     </Box>
   );

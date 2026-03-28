@@ -180,7 +180,6 @@
 
 // export default PowerChart;
 
-
 import React, { useEffect, useState, useRef } from "react";
 import { Line } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
@@ -217,10 +216,12 @@ function PowerChart({ load, logs = [] }) {
       {
         label: "Power Load (W)",
         data: [],
-        borderColor: "#2563eb",
-        backgroundColor: "rgba(37, 99, 235, 0.2)",
-        tension: 0.4,
+        borderColor: "#3b82f6", // 🔥 updated color
+        backgroundColor: "rgba(59, 130, 246, 0.3)", // 🔥 glow fill
+        tension: 0.5,
         fill: true,
+        pointRadius: 3,
+        pointHoverRadius: 6
       },
     ],
   });
@@ -237,8 +238,8 @@ function PowerChart({ load, logs = [] }) {
         {
           label: "Power Load (W)",
           data: logs.map((l) => Number(l.totalLoad)),
-          borderColor: "#2563eb",
-          backgroundColor: "rgba(37, 99, 235, 0.2)",
+          borderColor: "#3b82f6",
+          backgroundColor: "rgba(59, 130, 246, 0.3)",
           tension: 0.4,
           fill: true,
         },
@@ -312,12 +313,36 @@ function PowerChart({ load, logs = [] }) {
     };
   }, []);
 
+  // 🔥 UPDATED OPTIONS (DARK MODE)
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+
+    plugins: {
+      legend: {
+        labels: {
+          color: "white", // legend text
+        },
+      },
+    },
+
     scales: {
+      x: {
+        ticks: {
+          color: "white", // x labels
+        },
+        grid: {
+          color: "rgba(255,255,255,0.1)", // light grid
+        },
+      },
       y: {
         beginAtZero: true,
+        ticks: {
+          color: "white", // y labels
+        },
+        grid: {
+          color: "rgba(255,255,255,0.1)",
+        },
       },
     },
   };
@@ -325,7 +350,7 @@ function PowerChart({ load, logs = [] }) {
   if (chartData.labels.length === 0) {
     return (
       <Box sx={{ textAlign: "center", py: 4 }}>
-        <Typography color="text.secondary">
+        <Typography color="gray">
           Waiting for power data...
         </Typography>
       </Box>

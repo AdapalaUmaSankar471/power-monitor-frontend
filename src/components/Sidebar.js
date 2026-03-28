@@ -85,7 +85,8 @@ function Sidebar() {
               sx={
                 isActive("/admin") ||
                 isActive("/operator") ||
-                isActive("/viewer")
+                isActive("/viewer") ||
+                isActive("/user")
                   ? activeStyle
                   : {}
               }

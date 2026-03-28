@@ -4,7 +4,6 @@ import FlashOnIcon from "@mui/icons-material/FlashOn";
 import PowerIcon from "@mui/icons-material/Power";
 import WarningIcon from "@mui/icons-material/Warning";
 
-// Card Config (clean + reusable)
 const cardData = [
   {
     title: "Total Devices",
@@ -38,7 +37,6 @@ function DashboardCards(props) {
     <Box sx={gridStyle}>
       {cardData.map((card, index) => {
         const value = props[card.key];
-
         const isOverload = value === "OVERLOAD";
 
         return (
@@ -46,14 +44,13 @@ function DashboardCards(props) {
             key={index}
             sx={{
               ...cardStyle,
-              background: card.dynamic
-                ? isOverload
-                  ? "#fee2e2"
-                  : "#ecfdf5"
-                : "#ffffff"
+              background: "rgba(255,255,255,0.05)", // 🔥 glass effect
+              border: "1px solid rgba(255,255,255,0.1)"
             }}
           >
             <CardContent>
+
+              {/* ICON */}
               <Box
                 sx={{
                   ...iconWrapper,
@@ -61,20 +58,37 @@ function DashboardCards(props) {
                     ? isOverload
                       ? "#ef4444"
                       : "#22c55e"
-                    : card.color
+                    : card.color,
+                  boxShadow: "0 0 20px rgba(0,0,0,0.5)"
                 }}
               >
                 {card.icon}
               </Box>
 
-              <Typography variant="body2" color="text.secondary">
+              {/* TITLE */}
+              <Typography
+                variant="body2"
+                sx={{ color: "rgba(255,255,255,0.6)" }}
+              >
                 {card.title}
               </Typography>
 
-              <Typography variant="h5" fontWeight="bold">
+              {/* VALUE */}
+              <Typography
+                variant="h5"
+                fontWeight="bold"
+                sx={{
+                  color: card.dynamic
+                    ? isOverload
+                      ? "#ef4444"
+                      : "#22c55e"
+                    : "white"
+                }}
+              >
                 {value}
                 {card.suffix || ""}
               </Typography>
+
             </CardContent>
           </Card>
         );
@@ -86,7 +100,7 @@ function DashboardCards(props) {
 export default DashboardCards;
 
 /////////////////////////////////////////////////////////
-// STYLES (Clean + Modern)
+// 🔥 STYLES (DARK + PREMIUM)
 /////////////////////////////////////////////////////////
 
 const gridStyle = {
@@ -97,25 +111,26 @@ const gridStyle = {
 
 const cardStyle = {
   borderRadius: "16px",
-  boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
   textAlign: "center",
   padding: "15px",
   transition: "0.3s",
   cursor: "pointer",
+  backdropFilter: "blur(10px)", // 🔥 glass blur
+  boxShadow: "0 8px 30px rgba(0,0,0,0.5)",
   "&:hover": {
-    transform: "translateY(-5px)",
-    boxShadow: "0 12px 25px rgba(0,0,0,0.15)"
+    transform: "translateY(-6px)",
+    boxShadow: "0 12px 40px rgba(0,0,0,0.7)"
   }
 };
 
 const iconWrapper = {
-  width: "50px",
-  height: "50px",
+  width: "55px",
+  height: "55px",
   borderRadius: "50%",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  margin: "0 auto 10px",
+  margin: "0 auto 12px",
   color: "#fff",
   fontSize: "26px"
 };
