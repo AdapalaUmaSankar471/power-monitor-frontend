@@ -260,9 +260,10 @@
 // const styles = { /* keep same */ };
 
 // export default Login;
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import API from "../services/api";
+import { loginUser } from "../services/api";
 
 function Login() {
   const navigate = useNavigate();
@@ -272,25 +273,43 @@ function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const login = async () => {
+  // 🔥 FINAL LOGIN FUNCTION
+  const handleLogin = async () => {
     try {
       setLoading(true);
       setError("");
 
-      const res = await API.post("/auth/login", {
-        username,
-        password
+      // ✅ CLEAN INPUT
+      const cleanUsername = username.trim().toLowerCase();
+      const cleanPassword = password.trim();
+
+      // 🔍 DEBUG LOG
+      console.log("LOGIN DATA:", {
+        username: cleanUsername,
+        password: cleanPassword
+      });
+
+      // ❗ VALIDATION (optional but recommended)
+      if (!cleanUsername || !cleanPassword) {
+        setError("⚠ Please enter username and password");
+        return;
+      }
+
+      // ✅ API CALL
+      const res = await loginUser({
+        username: cleanUsername,
+        password: cleanPassword
       });
 
       const token = res.data.token;
-      const role = res.data.role?.toUpperCase(); // ✅ important fix
+      const role = res.data.role?.toUpperCase();
 
-      // ✅ Store data
+      // ✅ STORE DATA
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
       localStorage.setItem("username", res.data.username);
 
-      // ✅ Role-based navigation (safe + clean)
+      // ✅ NAVIGATION
       switch (role) {
         case "ADMIN":
           navigate("/admin");
@@ -302,14 +321,14 @@ function Login() {
           navigate("/viewer");
           break;
         case "USER":
-          navigate("/user");   // ✅ your required update
+          navigate("/user");
           break;
         default:
-          console.warn("Unknown role:", role);
           navigate("/login");
       }
 
     } catch (err) {
+      console.error("Login error:", err);
       setError("❌ Invalid username or password");
     } finally {
       setLoading(false);
@@ -325,13 +344,16 @@ function Login() {
 
         {error && <p style={styles.error}>{error}</p>}
 
+        {/* ✅ USERNAME INPUT */}
         <input
           style={styles.input}
+          type="text"
           placeholder="Username"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e) => setUsername(e.target.value)} // clean input
         />
 
+        {/* ✅ PASSWORD INPUT */}
         <input
           style={styles.input}
           type="password"
@@ -340,13 +362,22 @@ function Login() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button style={styles.button} onClick={login} disabled={loading}>
+        {/* ✅ LOGIN BUTTON */}
+        <button
+          style={styles.button}
+          onClick={handleLogin}
+          disabled={loading}
+        >
           {loading ? "Logging in..." : "Login"}
         </button>
 
+        {/* ✅ REGISTER LINK */}
         <p style={styles.register}>
           New user?
-          <span style={styles.link} onClick={() => navigate("/register")}>
+          <span
+            style={styles.link}
+            onClick={() => navigate("/register")}
+          >
             Create Account
           </span>
         </p>
@@ -355,6 +386,10 @@ function Login() {
     </div>
   );
 }
+
+/////////////////////////////////////////////////////////
+// 🎨 STYLES
+/////////////////////////////////////////////////////////
 
 const styles = {
   container: {
