@@ -1,5 +1,6 @@
 import axios from "axios";
 
+
 const API = axios.create({
   //baseURL: process.env.REACT_APP_API_URL || "http://localhost:8080",
   baseURL: process.env.REACT_APP_API_URL || "https://your-backend.onrender.com",
@@ -46,7 +47,7 @@ export const loginUser = (data) => API.post("/auth/login", data);
 export const registerUser = (data) => API.post("/auth/register", data);
 
 // DEVICES
-export const getDevices = () => API.get("/devices/all");
+export const getDevices = () => API.get("/devices");
 export const toggleDevice = (id) => API.put(`/devices/toggle/${id}`);
 export const addDevice = (device) => API.post("/devices/add", device);
 export const updateDevice = (id, device) => API.put(`/devices/update/${id}`, device);

@@ -291,6 +291,10 @@ import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 
 function AdminDashboard() {
+
+  // 🔥 DARK MODE STATE
+  const [darkMode, setDarkMode] = useState(true);
+
   const [devices, setDevices] = useState([]);
   const [load, setLoad] = useState(0);
   const [notifications, setNotifications] = useState([]);
@@ -309,12 +313,7 @@ function AdminDashboard() {
   };
 
   const isDeviceOn = (status) => {
-    return (
-      status === true ||
-      status === "ON" ||
-      status === "on" ||
-      status === 1
-    );
+    return status === true || status === "ON" || status === "on" || status === 1;
   };
 
   const getDevicePower = (d) => {
@@ -358,7 +357,6 @@ function AdminDashboard() {
       onConnect: () => {
         client.subscribe("/topic/power", (message) => {
           const data = JSON.parse(message.body);
-
           const totalLoad = Number(data.totalLoad || 0);
           setLoad(totalLoad);
 
@@ -366,7 +364,6 @@ function AdminDashboard() {
 
           if (totalLoad > 3000 && !overloadRef.current) {
             overloadRef.current = true;
-
             setNotifications((prev) => [
               { message: "⚠ Power overload detected!", time },
               ...prev
@@ -385,7 +382,7 @@ function AdminDashboard() {
   }, []);
 
   return (
-    <Box sx={mainContainer}>
+    <Box sx={darkMode ? darkStyles.mainContainer : lightStyles.mainContainer}>
 
       {/* HEADER */}
       <Box sx={headerStyle}>
@@ -393,31 +390,45 @@ function AdminDashboard() {
           ⚡ Admin Power Dashboard
         </Typography>
 
-        <Box sx={{ position: "relative" }}>
-          <IconButton
-            sx={{ color: "white" }}
-            onClick={() => setShowNotifications(!showNotifications)}
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+
+          {/* 🔥 TOGGLE BUTTON */}
+          <Button
+            variant="outlined"
+            size="small"
+            sx={{ color: darkMode ? "white" : "black", borderColor: darkMode ? "white" : "black" }}
+            onClick={() => setDarkMode(!darkMode)}
           >
-            <NotificationsIcon />
-          </IconButton>
+            {darkMode ? "Light Mode" : "Dark Mode"}
+          </Button>
 
-          {showNotifications && (
-            <Box sx={notificationPanel}>
-              <Typography variant="subtitle1">Notifications</Typography>
+          <Box sx={{ position: "relative" }}>
+            <IconButton
+              sx={{ color: darkMode ? "white" : "black" }}
+              onClick={() => setShowNotifications(!showNotifications)}
+            >
+              <NotificationsIcon />
+            </IconButton>
 
-              {notifications.length === 0 ? (
-                <Typography>No alerts</Typography>
-              ) : (
-                notifications.map((n, i) => (
-                  <Box key={i} sx={notificationItem}>
-                    {n.message}
-                    <br />
-                    <small>{n.time}</small>
-                  </Box>
-                ))
-              )}
-            </Box>
-          )}
+            {showNotifications && (
+              <Box sx={notificationPanel}>
+                <Typography variant="subtitle1">Notifications</Typography>
+
+                {notifications.length === 0 ? (
+                  <Typography>No alerts</Typography>
+                ) : (
+                  notifications.map((n, i) => (
+                    <Box key={i} sx={notificationItem}>
+                      {n.message}
+                      <br />
+                      <small>{n.time}</small>
+                    </Box>
+                  ))
+                )}
+              </Box>
+            )}
+          </Box>
+
         </Box>
       </Box>
 
@@ -436,13 +447,12 @@ function AdminDashboard() {
         status={load > 3000 ? "OVERLOAD" : "NORMAL"}
       />
 
-      {/* 🔥 LIVE CHART */}
+      {/* LIVE CHART */}
       <Box sx={{ mt: 2 }}>
         <Box sx={chartBox}>
           <Typography sx={{ mb: 1 }}>
             Live Power Load
           </Typography>
-
           <PowerChart load={load} />
         </Box>
       </Box>
@@ -492,16 +502,32 @@ function AdminDashboard() {
 export default AdminDashboard;
 
 /////////////////////////////////////////////////////////
-// 🔥 STYLES (ADDED BACK)
+// 🌗 DARK & LIGHT STYLES
 /////////////////////////////////////////////////////////
 
-const mainContainer = {
-  flexGrow: 1,
-  p: 3,
-  background: "linear-gradient(135deg, #020617, #0f172a)",
-  minHeight: "100vh",
-  color: "white"
+const darkStyles = {
+  mainContainer: {
+    flexGrow: 1,
+    p: 3,
+    background: "linear-gradient(135deg, #020617, #0f172a)",
+    minHeight: "100vh",
+    color: "white"
+  }
 };
+
+const lightStyles = {
+  mainContainer: {
+    flexGrow: 1,
+    p: 3,
+    background: "#f3f4f6",
+    minHeight: "100vh",
+    color: "black"
+  }
+};
+
+/////////////////////////////////////////////////////////
+// OTHER STYLES (SAME)
+/////////////////////////////////////////////////////////
 
 const headerStyle = {
   display: "flex",
@@ -528,17 +554,14 @@ const paperStyle = {
   borderRadius: "16px",
   background: "rgba(255,255,255,0.05)",
   backdropFilter: "blur(10px)",
-  color: "white",
-  boxShadow: "0 8px 30px rgba(0,0,0,0.5)"
+  color: "white"
 };
 
 const chartBox = {
   background: "rgba(255,255,255,0.05)",
   padding: "20px",
   borderRadius: "16px",
-  height: "300px",
-  backdropFilter: "blur(10px)",
-  boxShadow: "0 8px 30px rgba(0,0,0,0.5)"
+  height: "300px"
 };
 
 const deviceGrid = {
@@ -552,13 +575,7 @@ const deviceCard = {
   background: "rgba(255,255,255,0.05)",
   padding: "15px",
   borderRadius: "12px",
-  textAlign: "center",
-  transition: "0.3s",
-  boxShadow: "0 5px 20px rgba(0,0,0,0.5)",
-  "&:hover": {
-    transform: "translateY(-5px)",
-    boxShadow: "0 10px 30px rgba(0,255,255,0.2)"
-  }
+  textAlign: "center"
 };
 
 const notificationPanel = {
