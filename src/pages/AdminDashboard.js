@@ -270,7 +270,8 @@
 // const notificationItem = {
 //   borderBottom: "1px solid #eee",
 //   padding: "8px 0"
-// };import React, { useEffect, useState, useRef, useCallback } from "react";
+// };
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import {
   Box,
   Typography,
@@ -490,4 +491,87 @@ function AdminDashboard() {
 
 export default AdminDashboard;
 
-// STYLES SAME AS BEFORE
+/////////////////////////////////////////////////////////
+// 🔥 STYLES (ADDED BACK)
+/////////////////////////////////////////////////////////
+
+const mainContainer = {
+  flexGrow: 1,
+  p: 3,
+  background: "linear-gradient(135deg, #020617, #0f172a)",
+  minHeight: "100vh",
+  color: "white"
+};
+
+const headerStyle = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  mb: 3,
+  padding: "12px 16px",
+  borderRadius: "12px",
+  background: "rgba(255,255,255,0.05)",
+  backdropFilter: "blur(10px)"
+};
+
+const alertStyle = {
+  background: "linear-gradient(90deg, #ef4444, #dc2626)",
+  padding: "12px",
+  borderRadius: "10px",
+  textAlign: "center",
+  fontWeight: "bold"
+};
+
+const paperStyle = {
+  mt: 3,
+  p: 3,
+  borderRadius: "16px",
+  background: "rgba(255,255,255,0.05)",
+  backdropFilter: "blur(10px)",
+  color: "white",
+  boxShadow: "0 8px 30px rgba(0,0,0,0.5)"
+};
+
+const chartBox = {
+  background: "rgba(255,255,255,0.05)",
+  padding: "20px",
+  borderRadius: "16px",
+  height: "300px",
+  backdropFilter: "blur(10px)",
+  boxShadow: "0 8px 30px rgba(0,0,0,0.5)"
+};
+
+const deviceGrid = {
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+  gap: "20px",
+  mt: 2
+};
+
+const deviceCard = {
+  background: "rgba(255,255,255,0.05)",
+  padding: "15px",
+  borderRadius: "12px",
+  textAlign: "center",
+  transition: "0.3s",
+  boxShadow: "0 5px 20px rgba(0,0,0,0.5)",
+  "&:hover": {
+    transform: "translateY(-5px)",
+    boxShadow: "0 10px 30px rgba(0,255,255,0.2)"
+  }
+};
+
+const notificationPanel = {
+  position: "absolute",
+  top: "45px",
+  right: 0,
+  width: "260px",
+  background: "#0f172a",
+  borderRadius: "12px",
+  padding: "12px"
+};
+
+const notificationItem = {
+  borderBottom: "1px solid rgba(255,255,255,0.1)",
+  padding: "8px 0"
+};
