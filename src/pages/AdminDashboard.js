@@ -303,14 +303,16 @@ function AdminDashboard() {
   const overloadRef = useRef(false);
 
   const loadDevices = async () => {
+    console.log("🚀 Loading devices...");
     try {
       const res = await getDevices();
+      console.log("📦 Devices API:", res.data); // 👈 ADD THIS
       setDevices(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
-      console.log("Error loading devices:", err);
+      console.log("❌ Error loading devices:", err);
       setDevices([]);
     }
-  };
+};
 
   const isDeviceOn = (status) => {
     return status === true || status === "ON" || status === "on" || status === 1;
@@ -336,6 +338,7 @@ function AdminDashboard() {
   };
 
   useEffect(() => {
+    console.log("🚀 Loading devices...");
     loadDevices();
   }, []);
 
