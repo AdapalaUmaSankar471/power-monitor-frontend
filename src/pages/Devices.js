@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {
   Box, Typography, Paper, Button, TextField,
-  Switch, Chip, LinearProgress, Dialog,
+  Chip, LinearProgress, Dialog,
   DialogTitle, DialogContent, DialogActions
 } from "@mui/material";
-import { getDevices, toggleDevice, addDevice, updateDeviceBudget } from "../services/api";
+import { getDevices, toggleDevice, addDevice, updateDeviceBudget, deleteDevice } from "../services/api";
 
 function Devices() {
   const [devices, setDevices] = useState([]);
@@ -35,6 +35,13 @@ function Devices() {
     loadDevices();
   };
 
+  const handleDelete = async (id) => {
+    if (window.confirm("ఈ device delete చేయాలా?")) {
+      await deleteDevice(id);
+      loadDevices();
+    }
+  };
+
   const handleBudgetSave = async () => {
     await updateDeviceBudget(selectedDevice.id, parseFloat(budget));
     setOpenBudget(false);
@@ -46,12 +53,6 @@ function Devices() {
     setSelectedDevice(device);
     setBudget(device.monthlyBudget || "");
     setOpenBudget(true);
-  };
-
-  const getAlertColor = (percent) => {
-    if (percent >= 100) return "error";
-    if (percent >= 75) return "warning";
-    return "success";
   };
 
   const getProgressColor = (percent) => {
@@ -140,7 +141,16 @@ function Devices() {
                   onClick={() => openBudgetDialog(device)}
                   sx={{ flex: 1 }}
                 >
-                  Set Budget
+                  💰 Budget
+                </Button>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  color="error"
+                  onClick={() => handleDelete(device.id)}
+                  sx={{ flex: 1 }}
+                >
+                  🗑️ Delete
                 </Button>
               </Box>
             </Paper>
@@ -172,7 +182,7 @@ function Devices() {
 
       {/* Budget Dialog */}
       <Dialog open={openBudget} onClose={() => setOpenBudget(false)}>
-        <DialogTitle>Set Monthly Budget — {selectedDevice?.name}</DialogTitle>
+        <DialogTitle>💰 Monthly Budget — {selectedDevice?.name}</DialogTitle>
         <DialogContent sx={{ mt: 1 }}>
           <TextField
             label="Monthly Budget (Wh)"
