@@ -39,13 +39,13 @@ function App() {
         } />
 
         <Route path="/devices" element={
-          <ProtectedRoute role="ADMIN">
+          <ProtectedRoute roles={["ADMIN","USER"]}>
             <DashboardLayout><Devices /></DashboardLayout>
           </ProtectedRoute>
         } />
 
         <Route path="/reports" element={
-          <ProtectedRoute role="ADMIN">
+          <ProtectedRoute roles={["ADMIN","USER"]}>
             <DashboardLayout><Reports /></DashboardLayout>
           </ProtectedRoute>
         } />
@@ -69,7 +69,7 @@ function App() {
         } />
 
         <Route path="/energy" element={
-          <ProtectedRoute role="ADMIN">
+          <ProtectedRoute roles={["ADMIN","USER"]}>
             <DashboardLayout><EnergyDashboard /></DashboardLayout>
           </ProtectedRoute>
         } />
