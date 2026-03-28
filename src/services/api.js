@@ -22,14 +22,12 @@ API.interceptors.response.use(
     if (error.response) {
       const status = error.response.status;
       if (status === 401) {
-        console.warn("🔒 Unauthorized - Clearing session...");
         localStorage.removeItem("token");
         localStorage.removeItem("role");
         localStorage.removeItem("username");
         window.location.href = "/login";
       }
       if (status === 403) {
-        console.warn("⛔ Forbidden - Access Denied");
         window.location.href = "/login";
       }
       if (status === 500) {
@@ -42,39 +40,31 @@ API.interceptors.response.use(
   }
 );
 
-/////////////////////////////////////////////////////////
-// AUTH APIs
-/////////////////////////////////////////////////////////
+// AUTH
 export const loginUser = (data) => API.post("/auth/login", data);
 export const registerUser = (data) => API.post("/auth/register", data);
 
-/////////////////////////////////////////////////////////
-// DEVICE APIs
-/////////////////////////////////////////////////////////
+// DEVICES
 export const getDevices = () => API.get("/devices/all");
 export const toggleDevice = (id) => API.put(`/devices/toggle/${id}`);
 export const addDevice = (device) => API.post("/devices/add", device);
 export const updateDevice = (id, device) => API.put(`/devices/update/${id}`, device);
 export const deleteDevice = (id) => API.delete(`/devices/delete/${id}`);
+export const updateDeviceBudget = (id, budget) => API.put(`/devices/budget/${id}?budget=${budget}`);
 
-/////////////////////////////////////////////////////////
-// POWER LOG APIs
-/////////////////////////////////////////////////////////
+// POWER LOGS
 export const getPowerLogs = () => API.get("/logs");
 
-/////////////////////////////////////////////////////////
 // POWER USAGE
-/////////////////////////////////////////////////////////
 export const getPowerUsage = () => API.get("/usage/all");
 
-/////////////////////////////////////////////////////////
 // SYSTEM LOGS
-/////////////////////////////////////////////////////////
 export const getSystemLogs = () => API.get("/devices/logs");
 
-/////////////////////////////////////////////////////////
-// USER PROFILE API
-/////////////////////////////////////////////////////////
+// USER PROFILE
 export const getMyProfile = () => API.get("/users/me");
+
+// BUDGET ALERTS
+export const getBudgetStatus = () => API.get("/budget/status");
 
 export default API;
