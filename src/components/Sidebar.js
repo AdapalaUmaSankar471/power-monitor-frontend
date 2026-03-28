@@ -77,6 +77,8 @@ function Sidebar() {
                     ? "/admin"
                     : role === "OPERATOR"
                     ? "/operator"
+                    : role === "USER"
+                    ? "/user"
                     : "/viewer"
                 )
               }
