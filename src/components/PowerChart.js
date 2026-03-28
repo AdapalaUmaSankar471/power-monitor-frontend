@@ -266,7 +266,8 @@ function PowerChart({ load, logs = [] }) {
 
   // 3️⃣ WebSocket Real-Time
   useEffect(() => {
-    const baseUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";
+    //const baseUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";
+    const baseUrl = process.env.REACT_APP_API_URL || "https://your-backend.onrender.com";
     const socket = new SockJS(baseUrl + "/power-monitor");
 
     const client = new Client({
